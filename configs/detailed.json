@@ -1,0 +1,58 @@
+{
+  "theme": "custom",
+  "display": {
+    "style": "powerline",
+    "lines": [
+      {
+        "segments": {
+          "directory": { 
+            "enabled": true, 
+            "showBasename": true 
+          },
+          "model": { 
+            "enabled": true 
+          },
+          "context": { 
+            "enabled": true,
+            "showCompact": true,
+            "compactThreshold": 80
+          }
+        }
+      },
+      {
+        "segments": {
+          "session": { 
+            "enabled": true, 
+            "type": "both",
+            "showDuration": true,
+            "showType": true
+          },
+          "today": { 
+            "enabled": true, 
+            "type": "both",
+            "showAmount": true,
+            "showPercentage": true,
+            "showTimeRemaining": true
+          }
+        }
+      }
+    ]
+  },
+  "colors": {
+    "custom": {
+      "directory": { "bg": "#2a2a2a", "fg": "#e0e0e0" },
+      "model": { "bg": "#4a4a4a", "fg": "#c0c0c0" },
+      "context": { "bg": "#6a6a6a", "fg": "#ffffff" },
+      "session": { "bg": "#5a5a5a", "fg": "#b0b0b0" },
+      "today": { "bg": "#303030", "fg": "#dddddd" }
+    }
+  },
+  "budget": {
+    "session": { "warningThreshold": 80 },
+    "today": { 
+      "amount": 5.0, 
+      "warningThreshold": 80,
+      "resetTime": "00:00"  // Resets at midnight
+    }
+  }
+}
