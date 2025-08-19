@@ -9,6 +9,7 @@ export const nordTheme: ColorTheme = {
   today: { bg: "#2e3440", fg: "#8fbcbb" },
   tmux: { bg: "#2e3440", fg: "#8fbcbb" },
   context: { bg: "#5e81ac", fg: "#eceff4" },
+  contextprogressbar: { bg: "transparent", fg: "#eceff4" },
   metrics: { bg: "#b48ead", fg: "#2e3440" },
   version: { bg: "#434c5e", fg: "#88c0d0" },
 };

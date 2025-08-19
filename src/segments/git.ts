@@ -351,6 +351,10 @@ export class GitService {
 
       if (!remoteUrl) return path.basename(workingDir);
 
+      if (!remoteUrl || remoteUrl.trim() === "") {
+        return path.basename(workingDir);
+      }
+      
       const match = remoteUrl.match(/\/([^/]+?)(\.git)?$/);
       return match?.[1] || path.basename(workingDir);
     } catch {

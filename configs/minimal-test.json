@@ -1,0 +1,20 @@
+{
+  "theme": "custom",
+  "display": {
+    "style": "powerline",
+    "lines": [
+      {
+        "segments": {
+          "directory": { "enabled": true, "showBasename": true },
+          "model": { "enabled": true }
+        }
+      }
+    ]
+  },
+  "colors": {
+    "custom": {
+      "directory": { "bg": "#2a2a2a", "fg": "#e0e0e0" },
+      "model": { "bg": "#4a4a4a", "fg": "#c0c0c0" }
+    }
+  }
+}

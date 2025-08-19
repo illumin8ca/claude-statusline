@@ -8,6 +8,7 @@ export {
   TokenBreakdown,
 } from "./session";
 export { ContextProvider, ContextInfo } from "./context";
+export { ContextProgressBarProvider, ContextProgressBarInfo } from "./context-progressbar";
 export { MetricsProvider, MetricsInfo } from "./metrics";
 export { VersionProvider, VersionInfo } from "./version";
 export {

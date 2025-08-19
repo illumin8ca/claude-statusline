@@ -10,6 +10,10 @@ export function hexToAnsi(hex: string, isBackground: boolean): string {
 }
 
 export function extractBgToFg(ansiCode: string): string {
+  if (!ansiCode || typeof ansiCode !== 'string') {
+    return "\x1b[0m"; // Return reset if ansiCode is invalid
+  }
+  
   const match = ansiCode.match(/48;2;(\d+);(\d+);(\d+)/);
   if (match) {
     return `\x1b[38;2;${match[1]};${match[2]};${match[3]}m`;

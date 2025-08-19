@@ -9,6 +9,7 @@ export const rosePineTheme: ColorTheme = {
   today: { bg: "#232136", fg: "#9ccfd8" },
   tmux: { bg: "#26233a", fg: "#908caa" },
   context: { bg: "#393552", fg: "#e0def4" },
+  contextprogressbar: { bg: "transparent", fg: "#e0def4" },
   metrics: { bg: "#524f67", fg: "#e0def4" },
   version: { bg: "#2a273f", fg: "#c4a7e7" },
 };

@@ -8,6 +8,8 @@ import {
   UsageInfo,
   ContextProvider,
   ContextInfo,
+  ContextProgressBarProvider,
+  ContextProgressBarInfo,
   GitService,
   TmuxService,
   MetricsProvider,
@@ -34,6 +36,7 @@ export class PowerlineRenderer {
   private readonly blockProvider: BlockProvider;
   private readonly todayProvider: TodayProvider;
   private readonly contextProvider: ContextProvider;
+  private readonly contextProgressBarProvider: ContextProgressBarProvider;
   private readonly gitService: GitService;
   private readonly tmuxService: TmuxService;
   private readonly metricsProvider: MetricsProvider;
@@ -46,6 +49,7 @@ export class PowerlineRenderer {
     this.blockProvider = new BlockProvider();
     this.todayProvider = new TodayProvider();
     this.contextProvider = new ContextProvider();
+    this.contextProgressBarProvider = new ContextProgressBarProvider();
     this.gitService = new GitService();
     this.tmuxService = new TmuxService();
     this.metricsProvider = new MetricsProvider();
@@ -72,6 +76,12 @@ export class PowerlineRenderer {
   private needsContextInfo(): boolean {
     return this.config.display.lines.some(
       (line) => line.segments.context?.enabled
+    );
+  }
+
+  private needsContextProgressBarInfo(): boolean {
+    return this.config.display.lines.some(
+      (line) => line.segments.contextprogressbar?.enabled
     );
   }
 
@@ -119,6 +129,13 @@ export class PowerlineRenderer {
         )
       : null;
 
+    const contextProgressBarInfo = this.needsContextProgressBarInfo()
+      ? await this.contextProgressBarProvider.calculateContextProgressBar(
+          hookData.transcript_path,
+          hookData.model?.id
+        )
+      : null;
+
     const metricsInfo = this.needsMetricsInfo()
       ? await this.metricsProvider.getMetricsInfo(hookData.session_id)
       : null;
@@ -136,6 +153,7 @@ export class PowerlineRenderer {
           blockInfo,
           todayInfo,
           contextInfo,
+          contextProgressBarInfo,
           metricsInfo,
           versionInfo
         )
@@ -152,6 +170,7 @@ export class PowerlineRenderer {
     blockInfo: BlockInfo | null,
     todayInfo: TodayInfo | null,
     contextInfo: ContextInfo | null,
+    contextProgressBarInfo: ContextProgressBarInfo | null,
     metricsInfo: MetricsInfo | null,
     versionInfo: VersionInfo | null
   ): string {
@@ -183,6 +202,7 @@ export class PowerlineRenderer {
         blockInfo,
         todayInfo,
         contextInfo,
+        contextProgressBarInfo,
         metricsInfo,
         versionInfo,
         colors,
@@ -209,6 +229,7 @@ export class PowerlineRenderer {
     blockInfo: BlockInfo | null,
     todayInfo: TodayInfo | null,
     contextInfo: ContextInfo | null,
+    contextProgressBarInfo: ContextProgressBarInfo | null,
     metricsInfo: MetricsInfo | null,
     versionInfo: VersionInfo | null,
     colors: PowerlineColors,
@@ -261,6 +282,10 @@ export class PowerlineRenderer {
         if (!this.needsContextInfo()) return null;
         return this.segmentRenderer.renderContext(contextInfo, colors);
 
+      case "contextprogressbar":
+        if (!this.needsContextProgressBarInfo()) return null;
+        return this.segmentRenderer.renderContextProgressBar(contextProgressBarInfo, colors);
+
       case "metrics":
         const metricsConfig = segment.config as MetricsSegmentConfig;
         return this.segmentRenderer.renderMetrics(
@@ -299,7 +324,7 @@ export class PowerlineRenderer {
     const isMinimalStyle = this.config.display.style === "minimal";
 
     return {
-      right: isMinimalStyle ? "" : "\uE0B0",
+      right: isMinimalStyle ? "" : ">",
       branch: "⎇",
       model: "⚡",
       git_clean: "✓",
@@ -385,6 +410,14 @@ export class PowerlineRenderer {
         colorTheme.context?.fg || fallbackTheme.context.fg,
         false
       ),
+      contextprogressbarBg: hexToAnsi(
+        colorTheme.contextprogressbar?.bg || fallbackTheme.contextprogressbar?.bg || fallbackTheme.context.bg,
+        true
+      ),
+      contextprogressbarFg: hexToAnsi(
+        colorTheme.contextprogressbar?.fg || fallbackTheme.contextprogressbar?.fg || fallbackTheme.context.fg,
+        false
+      ),
       metricsBg: hexToAnsi(
         colorTheme.metrics?.bg || fallbackTheme.metrics.bg,
         true
@@ -425,6 +458,8 @@ export class PowerlineRenderer {
         return colors.tmuxBg;
       case "context":
         return colors.contextBg;
+      case "contextprogressbar":
+        return colors.contextprogressbarBg;
       case "metrics":
         return colors.metricsBg;
       case "version":
@@ -445,10 +480,11 @@ export class PowerlineRenderer {
     const reset = "\x1b[0m";
 
     if (nextBgColor) {
-      const arrowFgColor = extractBgToFg(bgColor);
+      const arrowFgColor = extractBgToFg(bgColor || "");
       output += `${reset}${nextBgColor}${arrowFgColor}${this.symbols.right}`;
     } else {
-      output += `${reset}${extractBgToFg(bgColor)}${this.symbols.right}${reset}`;
+      const arrowFg = extractBgToFg(bgColor || "");
+      output += `${reset}${arrowFg}${this.symbols.right}${reset}`;
     }
 
     return output;

@@ -10,6 +10,7 @@ import type {
   UsageSegmentConfig,
   TmuxSegmentConfig,
   ContextSegmentConfig,
+  ContextProgressBarSegmentConfig,
   MetricsSegmentConfig,
   BlockSegmentConfig,
   TodaySegmentConfig,
@@ -26,6 +27,7 @@ export interface LineConfig {
     today?: TodaySegmentConfig;
     tmux?: TmuxSegmentConfig;
     context?: ContextSegmentConfig;
+    contextprogressbar?: ContextProgressBarSegmentConfig;
     metrics?: MetricsSegmentConfig;
     version?: VersionSegmentConfig;
   };

@@ -18,6 +18,7 @@ export interface ColorTheme {
   today: SegmentColor;
   tmux: SegmentColor;
   context: SegmentColor;
+  contextprogressbar: SegmentColor;
   metrics: SegmentColor;
   version: SegmentColor;
 }
@@ -40,6 +41,8 @@ export interface PowerlineColors {
   tmuxFg: string;
   contextBg: string;
   contextFg: string;
+  contextprogressbarBg: string;
+  contextprogressbarFg: string;
   metricsBg: string;
   metricsFg: string;
   versionBg: string;

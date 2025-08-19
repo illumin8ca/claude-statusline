@@ -32,6 +32,8 @@ export interface TmuxSegmentConfig extends SegmentConfig {}
 
 export interface ContextSegmentConfig extends SegmentConfig {}
 
+export interface ContextProgressBarSegmentConfig extends SegmentConfig {}
+
 export interface MetricsSegmentConfig extends SegmentConfig {
   showResponseTime?: boolean;
   showLastResponseTime?: boolean;
@@ -57,6 +59,7 @@ export type AnySegmentConfig =
   | UsageSegmentConfig
   | TmuxSegmentConfig
   | ContextSegmentConfig
+  | ContextProgressBarSegmentConfig
   | MetricsSegmentConfig
   | BlockSegmentConfig
   | TodaySegmentConfig
@@ -67,12 +70,14 @@ import {
   formatTokens,
   formatTokenBreakdown,
 } from "../utils/formatters";
+import { hexToAnsi } from "../utils/colors";
 import { getBudgetStatus } from "../utils/budget";
 import type {
   UsageInfo,
   TokenBreakdown,
   GitInfo,
   ContextInfo,
+  ContextProgressBarInfo,
   MetricsInfo,
   VersionInfo,
 } from ".";
@@ -324,6 +329,44 @@ export class SegmentRenderer {
       text: `${this.symbols.context_time} ${tokenDisplay} (${contextLeft})`,
       bgColor: colors.contextBg,
       fgColor: colors.contextFg,
+    };
+  }
+
+  renderContextProgressBar(
+    contextProgressBarInfo: ContextProgressBarInfo | null,
+    colors: PowerlineColors
+  ): SegmentData | null {
+    if (!contextProgressBarInfo) {
+      return {
+        text: `${this.symbols.context_time} [                    ] 0%`,
+        bgColor: colors.contextprogressbarBg,
+        fgColor: colors.contextprogressbarFg,
+      };
+    }
+
+    const percentage = contextProgressBarInfo.percentage;
+    const barLength = 20; // 20 characters for the progress bar
+    const filledLength = Math.round((percentage / 100) * barLength);
+
+    // Create the progress bar with filled blocks and spaces for empty
+    const filled = "█".repeat(filledLength);
+    const empty = " ".repeat(barLength - filledLength); // spaces let the bg show through
+    const progressBar = `[${filled}${empty}]`;
+
+    // Use theme colors instead of hardcoded colors
+    let textColor = colors.contextprogressbarFg;
+    
+    // Apply threshold-based colors only to the percentage text, not the entire segment
+    const percentageColor = percentage >= 60
+      ? hexToAnsi("#ff6b6b", false)
+      : percentage >= 40
+        ? hexToAnsi("#ffd93d", false)
+        : hexToAnsi("#6bcf7f", false);
+
+    return {
+      text: `${this.symbols.context_time} ${progressBar} ${percentageColor}${percentage}%${colors.reset}`,
+      bgColor: colors.contextprogressbarBg,
+      fgColor: textColor,
     };
   }
 

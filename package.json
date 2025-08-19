@@ -1,13 +1,13 @@
 {
   "name": "claude-statusline-amdo",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Custom statusline for Claude Code. Forked from Owloops/claude-powerline",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "claude-statusline": "./dist/index.js"
+    "claude-statusline-amdo": "./dist/index.js"
   },
   "scripts": {
     "build": "tsup",
@@ -18,6 +18,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "preview": "echo '{\"session_id\":\"test-local\",\"workspace\":{\"project_dir\":\"$PWD\"},\"model\":{\"id\":\"claude-3-5-sonnet\",\"display_name\":\"Claude\"}}' | node dist/index.js --config=./.claude-statusline.json --style=powerline",
+    "preview:basic": "echo '{\"session_id\":\"test-local\",\"workspace\":{\"project_dir\":\"$PWD\"},\"model\":{\"id\":\"claude-3-5-sonnet\",\"display_name\":\"Claude\"}}' | node dist/index.js --config=./configs/basic-test.json --style=powerline",
+    "preview:context": "echo '{\"session_id\":\"test-local\",\"workspace\":{\"project_dir\":\"$PWD\"},\"model\":{\"id\":\"claude-3-5-sonnet\",\"display_name\":\"Claude\"},\"transcript_path\":\"${CLAUDE_TRANSCRIPT:-/dev/null}\"}' | node dist/index.js --config=./configs/context-progressbar-test.json --style=powerline",
     "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [

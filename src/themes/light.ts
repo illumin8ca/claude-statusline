@@ -9,6 +9,7 @@ export const lightTheme: ColorTheme = {
   today: { bg: "#10b981", fg: "#ffffff" },
   tmux: { bg: "#32cd32", fg: "#ffffff" },
   context: { bg: "#718096", fg: "#ffffff" },
+  contextprogressbar: { bg: "transparent", fg: "#ffffff" },
   metrics: { bg: "#6b7280", fg: "#ffffff" },
   version: { bg: "#8b7dd8", fg: "#ffffff" },
 };
