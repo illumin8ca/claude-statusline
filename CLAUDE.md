@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is `@owloops/claude-powerline`, a TypeScript package that provides a vim-style powerline statusline for Claude Code with real-time usage tracking, git integration, and custom themes.
+This is `claude-statusline-amdo`, a TypeScript package that provides a vim-style powerline statusline for Claude Code with real-time usage tracking, git integration, and custom themes. This is a fork of `@owloops/claude-powerline`.
 
 The package reads hook data from Claude Code via stdin and outputs formatted statuslines with segments showing directory info, git status, model info, usage costs, context information, and more.
 
@@ -15,10 +15,16 @@ The package reads hook data from Claude Code via stdin and outputs formatted sta
 - `npm run dev` - Build and watch for changes using tsup --watch
 - `npm run start` - Run the built CLI tool from dist/index.js
 
+### Preview Commands
+- `npm run preview` - Test statusline with default config
+- `npm run preview:basic` - Test statusline with basic config
+- `npm run preview:context` - Test statusline with context progress bar config
+
 ### Testing & Quality
 - `npm test` - Run all tests using Jest
 - `npm run test:watch` - Run tests in watch mode
 - `npm run test:coverage` - Run tests with coverage report
+- `jest <test-name>` - Run specific test file (e.g., `jest powerline`)
 - `npm run lint` - Lint source code using ESLint
 - `npm run lint:fix` - Lint and auto-fix issues
 

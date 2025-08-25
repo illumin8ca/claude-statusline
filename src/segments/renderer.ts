@@ -322,12 +322,30 @@ export class SegmentRenderer {
     }
 
     const tokenDisplay = contextInfo.inputTokens.toLocaleString();
-
     const contextLeft = `${contextInfo.contextLeftPercentage}%`;
+
+    // Determine background color based on usage percentage
+    // Using usablePercentage which shows how much of the 75% usable limit is used
+    const usagePercentage = contextInfo.usablePercentage;
+    let bgColor: string;
+    
+    if (usagePercentage >= 80) {
+      // High usage - red background
+      bgColor = hexToAnsi("#dc2626", true); // red-600
+    } else if (usagePercentage >= 60) {
+      // Medium usage - orange background  
+      bgColor = hexToAnsi("#ea580c", true); // orange-600
+    } else if (usagePercentage >= 40) {
+      // Low-medium usage - yellow background
+      bgColor = hexToAnsi("#ca8a04", true); // yellow-600
+    } else {
+      // Low usage - green background
+      bgColor = hexToAnsi("#16a34a", true); // green-600
+    }
 
     return {
       text: `${this.symbols.context_time} ${tokenDisplay} (${contextLeft})`,
-      bgColor: colors.contextBg,
+      bgColor: bgColor,
       fgColor: colors.contextFg,
     };
   }
@@ -338,8 +356,8 @@ export class SegmentRenderer {
   ): SegmentData | null {
     if (!contextProgressBarInfo) {
       return {
-        text: `${this.symbols.context_time} [                    ] 0%`,
-        bgColor: colors.contextprogressbarBg,
+        text: `${this.symbols.context_time}                     0%`,
+        bgColor: hexToAnsi("#666666", true),
         fgColor: colors.contextprogressbarFg,
       };
     }
@@ -348,25 +366,32 @@ export class SegmentRenderer {
     const barLength = 20; // 20 characters for the progress bar
     const filledLength = Math.round((percentage / 100) * barLength);
 
-    // Create the progress bar with filled blocks and spaces for empty
-    const filled = "█".repeat(filledLength);
-    const empty = " ".repeat(barLength - filledLength); // spaces let the bg show through
-    const progressBar = `[${filled}${empty}]`;
+    // Get the color for the progress bar and percentage text based on usage
+    let barColor: string;
+    switch (contextProgressBarInfo.color) {
+      case "green":
+        barColor = hexToAnsi("#22c55e", false); // green-500
+        break;
+      case "yellow":
+        barColor = hexToAnsi("#eab308", false); // yellow-500
+        break;
+      case "red":
+        barColor = hexToAnsi("#ef4444", false); // red-500
+        break;
+      default:
+        barColor = hexToAnsi("#6b7280", false); // gray-500
+    }
 
-    // Use theme colors instead of hardcoded colors
-    let textColor = colors.contextprogressbarFg;
-    
-    // Apply threshold-based colors only to the percentage text, not the entire segment
-    const percentageColor = percentage >= 60
-      ? hexToAnsi("#ff6b6b", false)
-      : percentage >= 40
-        ? hexToAnsi("#ffd93d", false)
-        : hexToAnsi("#6bcf7f", false);
+    // Create the progress bar with colored filled blocks and gray background for empty spaces
+    const filled = barColor + "█".repeat(filledLength) + "\x1b[0m";
+    const grayBg = hexToAnsi("#666666", true);
+    const empty = grayBg + " ".repeat(barLength - filledLength) + "\x1b[0m";
+    const progressBar = `${filled}${empty}`;
 
     return {
-      text: `${this.symbols.context_time} ${progressBar} ${percentageColor}${percentage}%${colors.reset}`,
-      bgColor: colors.contextprogressbarBg,
-      fgColor: textColor,
+      text: `${this.symbols.context_time} ${progressBar} ${barColor}${percentage}%\x1b[0m`,
+      bgColor: hexToAnsi("#666666", true),
+      fgColor: colors.contextprogressbarFg,
     };
   }
 

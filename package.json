@@ -20,7 +20,7 @@
     "test:coverage": "jest --coverage",
     "preview": "echo '{\"session_id\":\"test-local\",\"workspace\":{\"project_dir\":\"$PWD\"},\"model\":{\"id\":\"claude-3-5-sonnet\",\"display_name\":\"Claude\"}}' | node dist/index.js --config=./.claude-statusline.json --style=powerline",
     "preview:basic": "echo '{\"session_id\":\"test-local\",\"workspace\":{\"project_dir\":\"$PWD\"},\"model\":{\"id\":\"claude-3-5-sonnet\",\"display_name\":\"Claude\"}}' | node dist/index.js --config=./configs/basic-test.json --style=powerline",
-    "preview:context": "echo '{\"session_id\":\"test-local\",\"workspace\":{\"project_dir\":\"$PWD\"},\"model\":{\"id\":\"claude-3-5-sonnet\",\"display_name\":\"Claude\"},\"transcript_path\":\"${CLAUDE_TRANSCRIPT:-/dev/null}\"}' | node dist/index.js --config=./configs/context-progressbar-test.json --style=powerline",
+    "preview:context": "./scripts/preview-context-rotation.sh",
     "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [
